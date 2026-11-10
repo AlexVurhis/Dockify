@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dockify — Animated Dock Panel for Windows</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #0b0c10; color: #c5c6c7; overflow-x: hidden; min-height: 100vh; position: relative; }
+        #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 2; }
+        
+        /* Стили Блока 1: Шапка */
+        header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 40px; border-bottom: 1px solid rgba(0, 192, 255, 0.1); }
+        .logo { font-size: 28px; font-weight: 700; color: #ffffff; }
+        .logo span { color: #00c0ff; text-shadow: 0 0 10px rgba(0, 192, 255, 0.5); }
+        .badge { background: rgba(255, 255, 255, 0.05); padding: 6px 14px; border-radius: 20px; font-size: 14px; border: 1px solid rgba(255, 255, 255, 0.1); }
+
+        /* Стили Блока 2: Главный экран */
+        .hero { text-align: center; padding: 60px 0; }
+        h1 { font-size: 44px; color: #ffffff; margin-bottom: 20px; }
+        .hero p { font-size: 18px; max-width: 750px; margin: 0 auto; color: #959da5; line-height: 1.6; }
+
+        /* Стили Блока 3: Зона скачивания */
+        .download-zone { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin: 50px 0; }
+        .card { background: rgba(20, 22, 30, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 30px; width: 320px; backdrop-filter: blur(10px); transition: transform 0.3s, border-color 0.3s; text-align: left; }
+        .card:hover { transform: translateY(-5px); }
+        .card-ru:hover { border-color: #00c0ff; box-shadow: 0 10px 30px rgba(0, 192, 255, 0.15); }
+        .card-en:hover { border-color: #ff007f; box-shadow: 0 10px 30px rgba(255, 0, 127, 0.15); }
+        .card h3 { color: #ffffff; font-size: 22px; margin-bottom: 6px; }
+        .card .version { font-size: 13px; color: #00c0ff; margin-bottom: 20px; font-weight: 600; }
+        .card-en .version { color: #ff007f; }
+        .btn { display: block; width: 100%; padding: 14px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; text-align: center; transition: all 0.3s; margin-bottom: 12px; }
+        .btn-ru { background: #00c0ff; color: #0b0c10; box-shadow: 0 4px 15px rgba(0, 192, 255, 0.2); }
+        .btn-ru:hover { background: #0099cc; box-shadow: 0 0 20px rgba(0, 192, 255, 0.5); }
+        .btn-en { background: #ff007f; color: #ffffff; box-shadow: 0 4px 15px rgba(255, 0, 127, 0.2); }
+        .btn-en:hover { background: #e0006c; box-shadow: 0 0 20px rgba(255, 0, 127, 0.5); }
+        .btn-sec { background: rgba(255, 255, 255, 0.05); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 0; }
+        .btn-sec:hover { background: rgba(255, 255, 255, 0.12); }
+
+        /* Стили Блока 4: Особенности */
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 60px; }
+        .feat-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 22px; }
+        .feat-box h4 { color: #ffffff; font-size: 17px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .feat-box p { font-size: 14px; line-height: 1.5; color: #8f9499; }
+
+        /* Стили Блока 5: Подвал */
+        footer { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px; color: #666; }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-bg"></canvas>
+
+    <div class="container">
+        <!-- БЛОК 1: НАВИГАЦИЯ И ШАПКА -->
+        <header>
+            <div class="logo"><span>Dock</span>ify</div>
+            <div class="badge">by AlexVurhis</div>
+        </header>
+
+        <!-- БЛОК 2: ГЛАВНЫЙ ЭКРАН (ПРИВЕТСТВИЕ) -->
+        <section class="hero">
+            <h1>Умная анимационная док-панель для Windows</h1>
+            <p>Красивое, легкое и современное решение для организации вашего рабочего пространства. Полная свобода кастомизации интерфейса, живая физика эффектов и умный контроль ресурсов.</p>
+        </section>
+
+        <!-- БЛОК 3: ЗОНА СКАЧИВАНИЯ (КАРТОЧКИ ВЕРСИЙ) -->
+        <section class="download-zone">
+            <!-- Русская версия -->
+            <div class="card card-ru">
+                <h3>Русская версия</h3>
+                <div class="version">Стабильная сборка v1.0</div>
+                <a href="https://github.com" class="btn btn-ru">Скачать (.EXE)</a>
+                <a href="https://github.com" target="_blank" class="btn btn-sec">Инструкция ReadMe</a>
+            </div>
+
+            <!-- Английская версия -->
+            <div class="card card-en">
+                <h3>English Version</h3>
+                <div class="version">Stable Build v1.0</div>
+                <a href="https://github.com" class="btn btn-en">Download (.EXE)</a>
+                <a href="https://github.com" target="_blank" class="btn btn-sec">User Guide</a>
+            </div>
+        </section>
+
+        <!-- БЛОК 4: ТЕХНИЧЕСКИЕ ОСОБЕННОСТИ И ПРЕИМУЩЕСТВА -->
+        <section class="features">
+            <div class="feat-box">
+                <h4>🦋 Живые эффекты</h4>
+                <p>Парящие неоновые светлячки или порхающие бабочки с мягкой физикой затухания прямо на заднем плане вашего дока.</p>
+            </div>
+            <div class="feat-box">
+                <h4>⚡ Умная эргономика</h4>
+                <p>Добавление ярлыков обычным перетаскиванием файлов мыши (Drag-and-Drop), плавная живая сортировка и функция умного автоскрытия.</p>
+            </div>
+            <div class="feat-box">
+                <h4>❄️ Режим «Заморозки»</h4>
+                <p>Мгновенная остановка всех ресурсоемких анимаций в один клик через контекстное меню для освобождения процессора под тяжелые игры.</p>
+            </div>
+            <div class="feat-box">
+                <h4>🔒 Безопасность кода</h4>
+                <p>Все файлы настроек изолированы в пользовательских Документах, а сами инсталляторы надежно запечатаны цифровой подписью.</p>
+            </div>
+        </section>
+
+        <!-- БЛОК 5: ПОДВАЛ (ИНФОРМАЦИЯ О ПРАВАХ) -->
+        <footer>
+            <p>Copyright © 2026 Alexey Vysotsky (AlexVurhis). Все права защищены.</p>
+        </footer>
+    </div>
+
+    <!-- Фоновый скрипт анимации светлячков -->
+    <script>
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+        window.addEventListener('resize', () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * w; this.y = Math.random() * h;
+                this.size = Math.random() * 2 + 1;
+                this.vx = (Math.random() - 0.5) * 0.3; this.vy = (Math.random() - 0.5) * 0.3;
+                this.alpha = Math.random(); this.speed = Math.random() * 0.008 + 0.003;
+                this.color = Math.random() > 0.5 ? 'rgba(0, 192, 255,' : 'rgba(255, 0, 127,';
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy; this.alpha += this.speed;
+                if (this.alpha <= 0 || this.alpha >= 1) this.speed = -this.speed;
+                if (this.x < 0 || this.x > w) this.vx = -this.vx;
+                if (this.y < 0 || this.y > h) this.vy = -this.vy;
+            }
+            draw() {
+                ctx.save(); ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color + this.alpha + ')'; ctx.shadowBlur = 8;
+                ctx.shadowColor = this.color.includes('192') ? '#00c0ff' : '#ff007f';
+                ctx.fill(); ctx.restore();
+            }
+        }
+        const list = []; for (let i = 0; i < 40; i++) list.push(new Particle());
+        function run() { ctx.clearRect(0, 0, w, h); list.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(run); }
+        run();
+    </script>
+</body>
+</html>
