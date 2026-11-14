@@ -19,8 +19,8 @@
 
 ## 📦 Доступные версии
 В разделе **Releases** доступны два независимых инсталлятора:
-* **Русская версия** (`Dockify_Setup_RU_1.0.exe`) — полностью на русском языке.
-* **English Version** (`Dockify_Setup_EN_1.0.exe`) — полностью на английском языке.
+* **Русская версия** (`Dockify_1.1_Setup_RU.exe`) — полностью на русском языке.
+* **English Version** (`Dockify_1.1_Setup_EN.exe`) — полностью на английском языке.
 
 ---
 *Copyright © 2026 Alexey Vysotsky (AlexVurhis). Все права защищены.*
